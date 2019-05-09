@@ -1,19 +1,25 @@
-import Cards
+import Cards;
+import random;
 
 
 class Deck:
-
     def __init__(self):
-        self.deck = []
-        self.suits = ['Hearts', 'Diamonds', 'Spades', 'Clubs']
-        self.ranks = ['Ace', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King']
-        self.create_deck()
+        suits = ['Hearts', 'Diamonds', 'Spades', 'Clubs']
+        ranks = ['Ace', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King']
+        self.deck = [Cards.Card(rank, suit) for rank in ranks for suit in suits]
 
-    def create_deck(self):
-        for suit in self.suits:
-            for rank in self.ranks:
-                new_card = Cards.Card(rank, suit)
-                self.deck.append(new_card)
+    def get_num(self):
+        return len(self.deck)
 
+    def shuffle(self):
+        random.shuffle(self.deck)
 
-deck = Deck()
+    def read_deck(self):
+        for card in self.deck:
+            print(card)
+
+    def pull_card(self):
+        pulled_card = self.deck[0]
+        del self.deck[0]
+        return pulled_card
+
