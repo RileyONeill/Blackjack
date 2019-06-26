@@ -1,5 +1,5 @@
-import Cards;
-import random;
+import Cards
+import random
 
 
 class Deck:
@@ -19,7 +19,6 @@ class Deck:
             print(card)
 
     def pull_card(self):
-        pulled_card = self.deck[0]
-        del self.deck[0]
+        pulled_card = self.deck.pop()
         return pulled_card
 
