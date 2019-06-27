@@ -21,8 +21,9 @@ class Game:
                 self.player = Player(player_name, save[1])
 
         f.close()
-
         if found_save is False:
+            f = open("blackjack_saves", "a")
+            f.write(player_name + "$50\n")
             self.player = Player(player_name, 50)
 
         self.dealer = Dealer()
