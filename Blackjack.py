@@ -1,4 +1,3 @@
-import Deck
 from Deck import Deck
 
 
@@ -6,27 +5,43 @@ class Game:
     def __init__(self):
         self.deck = Deck()
         self.deck.shuffle()
-
-        # puts new player in save file
-        player_name = input("Enter name: ")
-
-        # check save files
-        # boolean to see if loop was successful
-        found_save = False
-        f = open("blackjack_saves.txt", "r")
-        for x in f:
-            save = x.split("$")
-            if save[0] == player_name:
-                found_save = True
-                self.player = Player(player_name, save[1])
-
-        f.close()
-        if found_save is False:
-            f = open("blackjack_saves", "a")
-            f.write(player_name + "$50\n")
-            self.player = Player(player_name, 50)
-
         self.dealer = Dealer()
+        self.new_or_continue()
+
+    def new_or_continue(self):
+        continue_input = input("Are you a new or returning player? (n/r) ")
+        if continue_input is 'n':
+            self.new_player()
+        elif continue_input is 'r':
+            self.continue_game()
+        else:
+            self.new_or_continue()
+
+    def new_player(self):
+        f = open("blackjack_saves.txt", 'w+')
+        player_name = input("Enter name: ")
+        f.write(player_name + "$50\n")
+        self.player = Player(player_name, 50)
+        f.close()
+
+    def continue_game(self):
+        player_name = input("What is your name? ")
+        found_save = False
+        while found_save is False:
+            f = open("blackjack_saves.txt", "r+")
+            for x in f:
+                save = x.split("$")
+                if save[0] == player_name:
+                    found_save = True
+                    self.player = Player(player_name, save[1])
+                    f.close()
+        if found_save is False:
+            not_found_response = input("Save file not found. Press enter to try again or enter 'n' to create"
+                                       " a new player. ")
+            if not_found_response is 'n':
+                self.new_player()
+            else:
+                self.continue_game()
 
     @staticmethod
     def score(hand):
@@ -160,6 +175,14 @@ class Player:
                 print("Bust!\n")
             else:
                 pass
+
+        if move == "double down" or move == "doubledown" or move == "d":
+            # Might have to make sure this doesn't exceed chips in hand
+            bet = bet * 2
+            self.hand.append(new_card)
+            self.active = False
+
+
         if move == "stay" or move == 's':
             print("\n")
             self.active = False
